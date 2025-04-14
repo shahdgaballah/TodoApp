@@ -1,7 +1,9 @@
  import 'package:flutter/material.dart';
+import 'package:sqflite/sqflite.dart';
 import 'package:to_do_app/core/features/todo/archive/archive_screen.dart';
 import 'package:to_do_app/core/features/todo/done/done_screen.dart';
 import 'package:to_do_app/core/features/todo/new/new_screen.dart';
+import 'package:path/path.dart' as p;
 
 class TodoApp extends StatefulWidget {
   const TodoApp({super.key});
@@ -30,7 +32,14 @@ List<String>titles=[
   'Archived Tasks'
 ];
 
+Database? database; //declaring the database
+
 class _TodoAppState extends State<TodoApp> {
+  @override
+  void initState() {
+    createDataFromDatabase();
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,21 +62,9 @@ class _TodoAppState extends State<TodoApp> {
         type: BottomNavigationBarType.fixed,
 
       ),
-      floatingActionButton: FloatingActionButton(onPressed: () /*async*/
+      floatingActionButton: FloatingActionButton(onPressed: ()
       {
-       /*try{
-         var name = await printName();
-         print(name);
-         print('shahd');
-         throw('error');
-       } catch(error){
-         print(error);
-       }*/
-        printName().then((value){
-          print(value);
-        }).catchError((error){
-          print(error.toString());
-        });
+       insertDataFromDatabase();
       },
         backgroundColor: Colors.teal,
         shape: RoundedRectangleBorder(
@@ -80,7 +77,53 @@ class _TodoAppState extends State<TodoApp> {
     );
   }
 }
-Future<String> printName() async {
-  return('shgot7');
-}
 
+void createDataFromDatabase() async{
+  // Get a location using getDatabasesPath
+  var databasesPath = await getDatabasesPath();
+  String path = p.join(databasesPath, 'tasks.db');
+  openDataFromDatabase(path: path); // to make the path work/used
+ }
+
+ void openDataFromDatabase( {
+   required String path,
+ } ) async{
+   // open the database
+
+    await openDatabase(
+       path,
+       version: 1, //object of database
+       onCreate: (Database database, int version) async {
+         debugPrint('Database created');
+         await database.execute(
+             'CREATE TABLE tasks (id INTEGER PRIMARY KEY, title TEXT, date TEXT, time TEXT, status TEXT)',
+          ).then((value){
+           debugPrint('Table created');
+         })
+             .catchError((error){
+           debugPrint('Error when table created');
+         });
+
+       },
+     onOpen: (database){
+       debugPrint('Database opened');
+     },
+       ).then((value){
+         database = value;
+    });
+
+ }
+
+ void insertDataFromDatabase()async{
+   await database!.transaction((txn) async {
+     txn.rawInsert(
+         'INSERT INTO tasks(title, date, time, status) VALUES("some name", "1234", "456.789", "new")');
+   }).then((value){
+     debugPrint('${value} inserted successfully');
+   })
+       .catchError((error){
+         debugPrint('Error when inserting new record ${error.toString()}');
+   });
+
+
+ }
