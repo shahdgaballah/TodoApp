@@ -24,6 +24,10 @@ A Flutter task management application that helps users organize their daily task
 The app uses SQLite database to store and manage tasks locally, providing fast and reliable task persistence.
 
 ## Screenshots
-
 ### Light Mode
+| ![](home-light.jpg) | ![](creating-task-light.jpg) | ![](tasks-light.jpg) | ![](time-light.jpg) |
+|---------------------|-----------------------------|----------------------|---------------------|
+
 ### Dark Mode
+| ![](home-dark.jpg) | ![](creating-task-dark.jpg) | ![](tasks-dark.jpg) | ![](time-dark.jpg) | ![](date-dark.jpg) |
+|--------------------|-----------------------------|---------------------|--------------------|--------------------|
