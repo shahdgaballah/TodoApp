@@ -1,16 +1,30 @@
-# to_do_app
+# To-Do App 📝
 
-A new Flutter project.
+A Flutter task management application that helps users organize their daily tasks efficiently, featuring a clean interface and seamless user experience.
 
-## Getting Started
+## Features
 
-This project is a starting point for a Flutter application.
+**Task Management**: Create, complete, and archive tasks with ease
+**Dark/Light Theme**: Toggle between dark and light modes for personalized experience
+**Task Categories**: Organize tasks into New, Done, and Archive sections
+**Swipe to Delete**: Intuitive gesture-based task deletion
+**Date & Time Selection**: Built-in date and time pickers for task scheduling
+**Dynamic UI**: Responsive design that adapts to different screen sizes
+**Local Storage**: SQLite database for persistent task storage
 
-A few resources to get you started if this is your first Flutter project:
+## Technologies Used
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+**Framework**: Flutter
+**State Management**: BLoC Pattern
+**Database**: SQLite
+**Theme Management**: Custom theme implementation
+**UI Components**: Material Design
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Task Management
+
+The app uses SQLite database to store and manage tasks locally, providing fast and reliable task persistence.
+
+## Screenshots
+
+### Light Mode
+### Dark Mode
