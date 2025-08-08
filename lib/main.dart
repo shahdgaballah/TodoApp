@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:to_do_app/core/layout/todo/todo_app.dart';
-
+import 'package:to_do_app/core/features/todo/splash/splash_screen.dart';
 void main() {
   runApp(const MyApp());
 }
@@ -17,7 +16,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: TodoApp(),
+      home: SplashScreen(),
     );
   }
 }
