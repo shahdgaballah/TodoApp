@@ -1,9 +1,22 @@
 import 'package:flutter/material.dart';
 import '../../layout/todo/controller/cubit.dart';
 
-class BuildTaskItem extends StatelessWidget {
+class BuildTaskItem extends StatefulWidget {
   final Map model;
   const BuildTaskItem({super.key, required this.model});
+
+  @override
+  State<BuildTaskItem> createState() => _BuildTaskItemState();
+}
+
+class _BuildTaskItemState extends State<BuildTaskItem> {
+  late bool isChecked;
+
+  @override
+  void initState() {
+    super.initState();
+    isChecked = (widget.model['status'] == 'done');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,6 +45,8 @@ class BuildTaskItem extends StatelessWidget {
       );
       return Container(color: bgColor, child: content);
     }
+
+    final Map model = widget.model;
 
     return Dismissible(
       key: Key(model['id'].toString()),
@@ -80,11 +95,21 @@ class BuildTaskItem extends StatelessWidget {
               ),
             ),
             if (cubit.currentIndex == 0) ...[
-              IconButton(
-                onPressed: (){
-                  AppCubit.get(context).updateDateFromDatabase(status: 'done', id: model['id']);
-                }, 
-                icon: Icon(Icons.check_box_outlined, color: Colors.green)
+              Checkbox(
+                value: isChecked,
+                onChanged: (value) async {
+                  if (value == true) {
+                    setState(() {
+                      isChecked = true;
+                    });
+                    await Future.delayed(const Duration(milliseconds: 250));
+                    if (!mounted) return;
+                    AppCubit.get(context).updateDateFromDatabase(status: 'done', id: model['id']);
+                  }
+                },
+                activeColor: Colors.green,
+                checkColor: Colors.white,
+                side: BorderSide(color: isDarkMode ? Colors.white : Colors.black45),
               ),
               IconButton(
                 onPressed: (){
