@@ -30,8 +30,8 @@ class _TodoAppState extends State<TodoApp> {
         create: (BuildContext context) => AppCubit()..createDataFromDatabase(),
         child: BlocConsumer<AppCubit, AppStates>(
           listener: (context, state) {
-            if(state is AppInsertDataFromDatabaseState){
-              Navigator.pop(context);
+            if (state is AppInsertDataFromDatabaseState) {
+              // No Navigator.pop here to avoid popping the page route
             }
           },
           builder: (context, state) {
@@ -90,129 +90,137 @@ class _TodoAppState extends State<TodoApp> {
                         date: cubit.dateController.text,
                         time: cubit.timeController.text,
                       );
+                      // Close the bottom sheet once after successful add
+                      Navigator.pop(context);
                       cubit.changeFabIcon(isShow: false, icon: Icons.edit);
                     }
                   } else {
-                    cubit.scaffoldKey.currentState!
+                    final controller = cubit.scaffoldKey.currentState!
                         .showBottomSheet(
                           (context) => Container(
-                        padding: EdgeInsets.all(20.0),
-                        color: isDarkMode ? Colors.grey[800] : Colors.grey[300],
-                        child: SingleChildScrollView(
-                          child: Form(
-                            key: cubit.formKey,
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                MyFormField(
-                                  controller: cubit.titleController,
-                                  type: TextInputType.text,
-                                  prefix: Icons.title,
-                                  text: 'title',
-                                  radius: 10.0,
-                                  validator: (value) {
-                                    if (value!.isEmpty) {
-                                      return 'Title must be not empty';
-                                    }
-                                    return null;
-                                  },
-                                ),
-                                SizedBox(height: 20.0),
-                                MyFormField(
-                                  controller: cubit.dateController,
-                                  type: TextInputType.datetime,
-                                  prefix: Icons.calendar_today,
-                                  text: 'date',
-                                  radius: 10.0,
-                                  validator: (value) {
-                                    if (value!.isEmpty) {
-                                      return 'Date must be not empty';
-                                    }
-                                    return null;
-                                  },
-                                  onTap: () {
-                                    FocusScope.of(
-                                      context,
-                                    ).requestFocus(FocusNode());
-                                    showDatePicker(
-                                      context: context,
-                                      firstDate: DateTime.now(),
-                                      lastDate: DateTime.parse('2025-12-31'),
-                                    ).then((value) {
-                                      if (value != null) {
-                                        cubit.dateController.text =
-                                            DateFormat.yMMMd().format(value);
-                                        debugPrint(
-                                          DateFormat.yMMMd().format(value),
-                                        );
-                                      }
-                                    });
-                                  },
-                                ),
-                                SizedBox(height: 20.0),
-                                MyFormField(
-                                  controller: cubit.timeController,
-                                  type: TextInputType.datetime,
-                                  prefix: Icons.watch_later_outlined,
-                                  text: 'time',
-                                  radius: 10.0,
-                                  validator: (value) {
-                                    if (value!.isEmpty) {
-                                      return 'Time must be not empty';
-                                    }
-                                    return null;
-                                  },
-                                  onTap: () {
-                                    FocusScope.of(
-                                      context,
-                                    ).requestFocus(FocusNode());
-                                    showTimePicker(
-                                      context: context,
-                                      initialTime: TimeOfDay.now(),
-                                    ).then((value) {
-                                      if (value != null) {
-                                        if (context.mounted) {
-                                          cubit.timeController.text = value
-                                              .format(context);
+                            padding: EdgeInsets.all(20.0),
+                            color: isDarkMode ? Colors.grey[800] : Colors.grey[300],
+                            child: SingleChildScrollView(
+                              child: Form(
+                                key: cubit.formKey,
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    MyFormField(
+                                      controller: cubit.titleController,
+                                      type: TextInputType.text,
+                                      prefix: Icons.title,
+                                      text: 'title',
+                                      radius: 10.0,
+                                      validator: (value) {
+                                        if (value!.isEmpty) {
+                                          return 'Title must be not empty';
                                         }
-                                      }
-                                    });
-                                  },
-                                ),
-                                SizedBox(height: 20.0),
-                                ElevatedButton(
-                                  onPressed: () {
-                                    if (cubit.formKey.currentState!.validate()) {
-                                      cubit.insertDataFromDatabase(
-                                        title: cubit.titleController.text,
-                                        date: cubit.dateController.text,
-                                        time: cubit.timeController.text,
-                                      );
-                                      Navigator.pop(context);
-                                    }
-                                  },
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: isDarkMode ? Colors.grey[900] : Colors.teal,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10.0),
+                                        return null;
+                                      },
                                     ),
-                                    padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 10.0),
-                                  ),
-                                  child: Text(
-                                    'Add Task',
-                                    style: TextStyle(
-                                      color: isDarkMode ? Colors.white : Colors.amber,
-                                      fontSize: 16.0,
-                                      fontWeight: FontWeight.bold,
+                                    SizedBox(height: 20.0),
+                                    MyFormField(
+                                      controller: cubit.dateController,
+                                      type: TextInputType.datetime,
+                                      prefix: Icons.calendar_today,
+                                      text: 'date',
+                                      radius: 10.0,
+                                      validator: (value) {
+                                        if (value!.isEmpty) {
+                                          return 'Date must be not empty';
+                                        }
+                                        return null;
+                                      },
+                                      onTap: () {
+                                        FocusScope.of(
+                                          context,
+                                        ).requestFocus(FocusNode());
+                                        showDatePicker(
+                                          context: context,
+                                          firstDate: DateTime.now(),
+                                          lastDate: DateTime.parse('2025-12-31'),
+                                        ).then((value) {
+                                          if (value != null) {
+                                            cubit.dateController.text =
+                                                DateFormat.yMMMd().format(value);
+                                            debugPrint(
+                                              DateFormat.yMMMd().format(value),
+                                            );
+                                          }
+                                        });
+                                      },
                                     ),
-                                  ),
+                                    SizedBox(height: 20.0),
+                                    MyFormField(
+                                      controller: cubit.timeController,
+                                      type: TextInputType.datetime,
+                                      prefix: Icons.watch_later_outlined,
+                                      text: 'time',
+                                      radius: 10.0,
+                                      validator: (value) {
+                                        if (value!.isEmpty) {
+                                          return 'Time must be not empty';
+                                        }
+                                        return null;
+                                      },
+                                      onTap: () {
+                                        FocusScope.of(
+                                          context,
+                                        ).requestFocus(FocusNode());
+                                        showTimePicker(
+                                          context: context,
+                                          initialTime: TimeOfDay.now(),
+                                        ).then((value) {
+                                          if (value != null) {
+                                            if (context.mounted) {
+                                              cubit.timeController.text = value
+                                                  .format(context);
+                                            }
+                                          }
+                                        });
+                                      },
+                                    ),
+                                    SizedBox(height: 20.0),
+                                    ElevatedButton(
+                                      onPressed: () {
+                                        if (cubit.formKey.currentState!.validate()) {
+                                          cubit.insertDataFromDatabase(
+                                            title: cubit.titleController.text,
+                                            date: cubit.dateController.text,
+                                            time: cubit.timeController.text,
+                                          );
+                                          // Close once via button
+                                          Navigator.pop(context);
+                                        }
+                                      },
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: isDarkMode ? Colors.grey[900] : Colors.teal,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(10.0),
+                                        ),
+                                        padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 10.0),
+                                      ),
+                                      child: Text(
+                                        'Add Task',
+                                        style: TextStyle(
+                                          color: isDarkMode ? Colors.white : Colors.amber,
+                                          fontSize: 16.0,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ],
+                              ),
                             ),
                           ),
-                        ),
-                      ),
-                    );
+                        );
+
+                    cubit.changeFabIcon(isShow: true, icon: Icons.add);
+                    controller.closed.then((value) {
+                      cubit.changeFabIcon(isShow: false, icon: Icons.edit);
+                    });
                   }
                 },
                 backgroundColor: isDarkMode ? Colors.grey[900] : Colors.teal,
