@@ -1,7 +1,10 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
 
+import '../../../layout/todo/controller/cubit.dart';
+import '../../../layout/todo/todo_app.dart';
 import '../new/new_screen.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -13,14 +16,18 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
   @override
-  @override
   void initState() {
-    Timer(Duration(seconds: 4),(){
-      Navigator.push(context, MaterialPageRoute(builder: (context)=>NewScreen()));
-
-    });
     super.initState();
+    Timer(const Duration(seconds: 4), () {
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (context) => const TodoApp(),
+        ),
+      );
+    });
   }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(child: Lottie.asset("assets/animations/splash.json")),

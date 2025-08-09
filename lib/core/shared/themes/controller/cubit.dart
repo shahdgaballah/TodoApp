@@ -1,4 +1,3 @@
-import 'package:bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:to_do_app/core/shared/themes/controller/state.dart';
 
@@ -25,5 +24,4 @@ class ThemeModeCubit extends Cubit<ThemeModeStates>{
       });
     }
   }
-
 }
