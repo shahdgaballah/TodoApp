@@ -9,8 +9,34 @@ class BuildTaskItem extends StatelessWidget {
   Widget build(BuildContext context) {
     var cubit = AppCubit.get(context);
     bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
+    Widget buildDeleteBackground({required bool alignStart}) {
+      final Color bgColor = Colors.red.shade600;
+      final Color textColor = Colors.white;
+      final Widget content = Row(
+        mainAxisAlignment:
+            alignStart ? MainAxisAlignment.start : MainAxisAlignment.end,
+        children: [
+          if (alignStart) const SizedBox(width: 20.0),
+          Icon(Icons.delete_outline, color: textColor),
+          const SizedBox(width: 8.0),
+          Text(
+            'Delete',
+            style: TextStyle(
+              color: textColor,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          if (!alignStart) const SizedBox(width: 20.0),
+        ],
+      );
+      return Container(color: bgColor, child: content);
+    }
+
     return Dismissible(
       key: Key(model['id'].toString()),
+      background: buildDeleteBackground(alignStart: true),
+      secondaryBackground: buildDeleteBackground(alignStart: false),
       onDismissed: (direction){
         AppCubit.get(context).deleteDataFromDatabase(id: model['id']);
       },
